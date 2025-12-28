@@ -1,6 +1,12 @@
+import { useFormContext } from 'react-hook-form';
 import { Key, Lock, Shield, User } from 'lucide-react';
 
 const AccountDetails = () => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
   return (
     <div className="space-y-8">
       <div className="space-y-3">
@@ -21,10 +27,16 @@ const AccountDetails = () => {
           </label>
           <div>
             <input
+              {...register('username')}
               type="text"
               className="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl focus:border-purple-500 text-gray-900 placeholder:text-gray-400"
               placeholder="rahulkesharwani"
             />
+            {errors?.username?.message && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.username.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -35,28 +47,16 @@ const AccountDetails = () => {
           </label>
           <div className="relative group">
             <input
+              {...register('password')}
               type="password"
               className="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl focus:border-purple-500 text-gray-900 placeholder:text-gray-400"
               placeholder="••••••••••••"
             />
-          </div>
-
-          <div className="space-y-2 bg-gray-50 p-4 rounded-xl border border-gray-100">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600 font-medium">
-                Password Strength
-              </span>
-              <span className="text-orange-600 font-bold">Medium</span>
-            </div>
-            <div className="flex gap-1.5">
-              <div className="h-2 flex-1 bg-red-600 rounded-full"></div>
-              <div className="h-2 flex-1 bg-orange-500 rounded-full"></div>
-              <div className="h-2 flex-1 bg-gray-200 rounded-full"></div>
-              <div className="h-2 flex-1 bg-gray-200 rounded-full"></div>
-            </div>
-            <p className="text-xs text-gray-500">
-              Add special characters and numbers for stronger security
-            </p>
+            {errors?.password?.message && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -67,10 +67,16 @@ const AccountDetails = () => {
           </label>
           <div className="relative group">
             <input
+              {...register('confirmPassword')}
               type="password"
               className="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl focus:border-purple-500 text-gray-900 placeholder:text-gray-400"
               placeholder="••••••••••••"
             />
+            {errors?.confirmPassword?.message && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.confirmPassword.message}
+              </p>
+            )}
           </div>
         </div>
       </div>

@@ -1,6 +1,12 @@
 import { Mail, Phone, Sparkles, User } from 'lucide-react';
+import { useFormContext } from 'react-hook-form';
 
 const PersonalInfo = () => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
   return (
     <div className="space-y-8">
       <div className="space-y-3">
@@ -21,10 +27,16 @@ const PersonalInfo = () => {
           </label>
           <div>
             <input
+              {...register('fullName')}
               type="text"
               className="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl focus:border-blue-500 text-gray-900 placeholder:text-gray-400"
               placeholder="Rahul Kesharwani"
             />
+            {errors?.fullName?.message && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.fullName.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -35,10 +47,16 @@ const PersonalInfo = () => {
           </label>
           <div>
             <input
+              {...register('email')}
               type="text"
               className="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl focus:border-blue-500 text-gray-900 placeholder:text-gray-400"
               placeholder="rahul@email.com"
             />
+            {errors?.email?.message && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -50,10 +68,16 @@ const PersonalInfo = () => {
           </label>
           <div className="relative group">
             <input
+              {...register('phone')}
               type="tel"
               className="w-full px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl focus:border-blue-500 text-gray-900 placeholder:text-gray-400"
               placeholder="+91-1234567890"
             />
+            {errors?.phone?.message && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.phone.message}
+              </p>
+            )}
           </div>
         </div>
       </div>

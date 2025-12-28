@@ -1,32 +1,63 @@
 import { Bell, CheckCircle2, Heart, Mail, Phone, Star } from 'lucide-react';
+import { useFormContext } from 'react-hook-form';
+
+const interests = [
+  'Technology',
+  'Design',
+  'Business',
+  'Marketing',
+  'Science',
+  'Art',
+];
+
+const notification = [
+  {
+    key: 'email',
+    name: 'Email Notification',
+    desc: 'Receive updates via email',
+    icon: Mail,
+  },
+  {
+    key: 'sms',
+    name: 'SMS Notifications',
+    desc: 'Receive text messages',
+    icon: Phone,
+  },
+  {
+    key: 'push',
+    name: 'Push Notifications',
+    desc: 'Receive push notifications',
+    icon: Bell,
+  },
+];
 
 const Preferences = () => {
-  const interests = [
-    'Technology',
-    'Design',
-    'Business',
-    'Marketing',
-    'Science',
-    'Art',
-  ];
+  const {
+    watch,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
+  const selected = watch('interests') || [];
 
-  const notification = [
-    {
-      name: 'Email Notification',
-      desc: 'Receive updates via email',
-      icon: Mail,
-    },
-    {
-      name: 'Push Notifications',
-      desc: 'Receive push notifications',
-      icon: Bell,
-    },
-    {
-      name: 'SMS Notifications',
-      desc: 'Receive text messages',
-      icon: Phone,
-    },
-  ];
+  const toggleInterest = (item) => {
+    if (selected.includes(item)) {
+      setValue(
+        'interests',
+        selected.filter((i) => i !== item),
+        { shouldValidate: true }
+      );
+    } else {
+      setValue('interests', [...selected, item], { shouldValidate: true });
+    }
+  };
+
+  const notificationState = watch('notifications');
+
+  const toggleNotification = (key) => {
+    setValue(`notifications.${key}`, !notificationState[key], {
+      shouldValidate: true,
+    });
+  };
 
   return (
     <div className="space-y-8">
@@ -48,14 +79,30 @@ const Preferences = () => {
           </label>
           <div className="grid grid-cols-2 gap-3">
             {interests.map((int) => (
-              <button className="group relative px-5 py-4 border-2 border-gray-500 rounded-xl text-sm font-semibold text-slate-700 transition hover:shadow-lg active:scale-95">
+              <button
+                type="button"
+                key={int}
+                onClick={() => toggleInterest(int)}
+                className={`group relative px-5 py-4 border-2  rounded-xl text-sm font-semibold transition hover:shadow-lg active:scale-95 ${
+                  selected.includes(int)
+                    ? 'border-orange-500 bg-orange-50 text-orange-800'
+                    : 'border-gray-500 text-slate-700'
+                }`}
+              >
                 <div className="relative flex items-center justify-between">
                   <span>{int}</span>
-                  {/* <CheckCircle2 className="h-5 w-5 text-orange-600" /> */}
+                  {selected.includes(int) && (
+                    <CheckCircle2 className="h-5 w-5 text-orange-700" />
+                  )}
                 </div>
               </button>
             ))}
           </div>
+          {errors?.interests?.message && (
+            <p className="text-red-600 text-sm mt-1">
+              {errors.interests.message}
+            </p>
+          )}
         </div>
 
         {/* Notification Preferences */}
@@ -68,22 +115,44 @@ const Preferences = () => {
           <div className="space-y-3 bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-xl border border-gray-200">
             {notification.map((not) => {
               const Icon = not.icon;
+              const isActive = notificationState?.[not.key];
+
               return (
-                <label className="flex items-center justify-between cursor-pointer p-4 bg-white rounded-xl transition group hover:shadow-md">
+                <button
+                  key={not.key}
+                  type="button"
+                  onClick={() => toggleNotification(not.key)}
+                  className="w-full flex items-center justify-between p-4 bg-white rounded-xl transition hover:shadow-md"
+                >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
-                      <Icon className="h-6 w-6 text-gray-400" />
+                    <div
+                      className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                        isActive ? 'bg-orange-100' : 'bg-gray-100'
+                      }`}
+                    >
+                      <Icon
+                        className={`h-6 w-6 ${
+                          isActive ? 'text-orange-600' : 'text-gray-400'
+                        }`}
+                      />
                     </div>
-                    <div>
+                    <div className="text-left">
                       <p className="font-semibold text-gray-900">{not.name}</p>
                       <p className="text-sm text-gray-500">{not.desc}</p>
                     </div>
                   </div>
-                  <div className="relative inline-block w-14 h-8">
-                    <div className="absolute inset-0 bg-gray-300 rounded-full shadow-inner"></div>
-                    <div className="absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-lg transition-transform"></div>
+                  <div
+                    className={`relative w-14 h-8 rounded-full transition ${
+                      isActive ? 'bg-orange-500' : 'bg-gray-300'
+                    }`}
+                  >
+                    <div
+                      className={`absolute top-1 w-6 h-6 bg-white rounded-full shadow-md transition-transform ${
+                        isActive ? 'translate-x-7' : 'translate-x-1'
+                      }`}
+                    />
                   </div>
-                </label>
+                </button>
               );
             })}
           </div>
