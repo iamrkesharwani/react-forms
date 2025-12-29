@@ -37,6 +37,7 @@ const Preferences = () => {
     setValue,
     formState: { errors },
   } = useFormContext();
+  
   const selected = watch('interests') || [];
 
   const toggleInterest = (item) => {

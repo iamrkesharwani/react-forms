@@ -14,6 +14,7 @@ const NavigationButtons = ({ currentStep, setCurrentStep }) => {
     const valid = await trigger(stepField[currentStep]);
     if (valid) setCurrentStep((prev) => prev + 1);
   };
+  
   return (
     <div className="flex justify-between items-center pt-8 mt-8 border-t-2 border-gray-100">
       <button

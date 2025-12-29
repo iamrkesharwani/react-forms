@@ -8,7 +8,8 @@ export const registrationSchema = z
     email: z.string().email({ message: 'Enter a valid email address' }),
     phone: z
       .string()
-      .min(10, { message: 'Phone number must be at least 10 characters' }),
+      .min(10, { message: 'Phone number must be 10 characters' })
+      .max(10, { message: 'Phone number must be 10 characters' }),
     username: z
       .string()
       .min(4, { message: 'Username must be at least 3 characters' }),
